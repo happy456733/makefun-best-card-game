@@ -13,7 +13,11 @@ function esc(text) {
 /** One card face: cost gem, element art, name, big power, effect line. */
 export function cardElement(card, state, opts = {}) {
   const el = ELEMENTS[card.element];
-  const { power, chained } = effectivePower(state, card);
+  // A played card keeps the power it actually had when played (opts.power);
+  // a hand card shows its live power, including any chain bonus right now.
+  const live = effectivePower(state, card);
+  const power = opts.power !== undefined ? opts.power : live.power;
+  const chained = opts.chained !== undefined ? opts.chained : live.chained;
   const playable = opts.playable !== false && state.phase === 'player' && state.player.ember >= card.cost;
   const div = document.createElement('div');
   div.className = `card ${card.element}${playable ? ' playable' : ''}${opts.selected ? ' selected' : ''}${opts.dealt ? ' dealt' : ''}`;
@@ -42,11 +46,11 @@ function cardBackElement() {
 function hpBar(side, label) {
   const pct = Math.max(0, (side.hp / side.maxHp) * 100);
   const low = side.hp <= 10 ? ' low' : '';
+  const shield = side.shield > 0 ? ` · 🛡${side.shield}` : '';
   return `<div class="hp-row">
-    <span class="hp-label">${label}</span>
+    <span class="hp-label">${label}${shield}</span>
     <div class="hpbar${low}"><div class="hp-fill" style="width:${pct}%"></div>
     <span class="hp-text">${side.hp} / ${side.maxHp} ♥</span></div>
-    ${side.shield > 0 ? `<span class="shield-badge">🛡 ${side.shield} SHIELD</span>` : ''}
   </div>`;
 }
 
@@ -90,7 +94,7 @@ export function render(state) {
     table.innerHTML = '<div class="table-hint">Play a card from your hand — click it, then click the table.</div>';
   }
   for (const entry of state.lastPlayed) {
-    const card = cardElement(entry.card, state, { playable: false });
+    const card = cardElement(entry.card, state, { playable: false, power: entry.power, chained: entry.chained });
     card.classList.add(entry.by === 'you' ? 'played-you' : 'played-foe');
     const wrap = document.createElement('div');
     wrap.className = 'played-wrap';

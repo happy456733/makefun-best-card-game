@@ -72,7 +72,7 @@ body {
 .side-name { font-size: 15px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; color: #ffe9a8; }
 
 .hp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.hp-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #cfe8c9; width: 34px; }
+.hp-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #cfe8c9; width: 74px; flex: none; }
 .hpbar {
   position: relative; flex: 1; height: 24px; background: #101010;
   border: 2px solid #000; border-radius: 999px; overflow: hidden;
@@ -99,7 +99,7 @@ body {
 .foe-hand { display: flex; }
 .foe-hand .card { margin-left: -38px; }
 .foe-hand .card:first-child { margin-left: 0; }
-.deck-count { font-size: 12px; font-weight: 900; letter-spacing: 1px; color: #d8c9a3; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 8px; }
+.deck-count { font-size: 12px; font-weight: 900; letter-spacing: 1px; white-space: nowrap; color: #d8c9a3; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 8px; }
 .intent {
   position: absolute; right: 18px; top: 8px; font-size: 13px; font-style: italic;
   color: #ffd2b0; background: rgba(60, 10, 0, 0.55); padding: 5px 12px; border-radius: 999px;
@@ -128,7 +128,7 @@ body {
 
 /* ---------- Player hand ---------- */
 .player-hand { display: flex; align-items: flex-end; justify-content: center; }
-.player-hand .card { margin-left: -24px; }
+.player-hand .card { margin-left: -14px; }
 .player-hand .card:first-child { margin-left: 0; }
 #end-turn {
   flex: none; font-size: 17px; padding: 16px 22px; margin-bottom: 8px;
