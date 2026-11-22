@@ -62,6 +62,13 @@ export function buildDeck(random) {
   return deck;
 }
 
+/** Build one fresh card by name (a new id each time), for fixed hands. */
+export function cardByName(name) {
+  const template = CATALOGUE.find((c) => c.name === name);
+  if (!template) return null;
+  return { ...template, id: nextCardId += 1 };
+}
+
 /** Small deterministic random source (mulberry32) so screenshot states repeat. */
 export function seededRandom(seed) {
   let a = seed >>> 0;

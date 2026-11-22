@@ -1,8 +1,8 @@
 // Ember Duel — the table: every pixel the player sees.
 // DOM + CSS only; cards are drawn divs, so they stay legible at thumbnail size.
 
-import { ELEMENTS, ARTS, describeCard, elementIcon, effectivePower } from './cards.js';
-import { MAX_HP } from './engine.js';
+import { ELEMENTS, ARTS, describeCard, elementIcon } from './cards.js';
+import { MAX_HP, effectivePower } from './engine.js';
 
 const $ = (id) => document.getElementById(id);
 

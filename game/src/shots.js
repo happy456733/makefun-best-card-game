@@ -2,7 +2,8 @@
 // ?shot=title|play|win|loss with a seed builds the same table every time,
 // so the screenshots in screenshots/ are reproducible renders of the game.
 
-import { newGame, playCard, startTurn } from './engine.js';
+import { newGame, playCard } from './engine.js';
+import { cardByName } from './cards.js';
 import { logLine } from './render.js';
 
 function midGame(seed) {
@@ -10,6 +11,20 @@ function midGame(seed) {
   state.screen = 'duel';
   state.turn = 5;
   state.stats.turns = 5;
+  // Fixed hands, so the table shows a full, readable duel every time.
+  state.player.hand = [
+    'Cinder Slash', 'Wildfire', 'Granite Shell', 'Root Wall', 'Still Waters', 'Thorn Whip',
+  ].map((name) => cardByName(name));
+  state.foe.hand = [
+    'Tide Lash', 'Deep Current', 'Stone Fist', 'Granite Shell', 'Bloom',
+  ].map((name) => cardByName(name));
+  state.player.ember = 6;
+  state.foe.ember = 3;
+  // Play two real cards through the engine so the table shows genuine plays.
+  const strike = state.player.hand.find((c) => c.name === 'Cinder Slash');
+  playCard(state, state.player, strike.id);
+  const guard = state.foe.hand.find((c) => c.name === 'Granite Shell');
+  playCard(state, state.foe, guard.id);
   // A lively mid-duel: both duelists hurt, shields up, ember to spend.
   state.player.hp = 21;
   state.player.shield = 4;
@@ -17,18 +32,6 @@ function midGame(seed) {
   state.foe.hp = 17;
   state.foe.shield = 2;
   state.foe.ember = 3;
-  state.chainElement = 'flame';
-  state.chainCount = 1;
-  // Play two real cards through the engine so the table shows genuine plays.
-  const strike = state.player.hand.find((c) => c.art === 'strike');
-  if (strike) playCard(state, state.player, strike.id);
-  const guard = state.foe.hand.find((c) => c.art === 'guard');
-  if (guard) playCard(state, state.foe, guard.id);
-  state.player.hp = 21;
-  state.player.shield = 4;
-  state.foe.hp = 17;
-  state.foe.shield = 2;
-  state.player.ember = 6;
   state.chainElement = 'flame';
   state.chainCount = 1;
   logLine(state, 'Turn 4: Rook played Granite Shell and gained 7 shield.');
