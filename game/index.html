@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Duel — an original card game</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">🔥 EMBER DUEL</div>
+    <div id="turn-badge" class="turn-badge">EMBER DUEL</div>
+    <div class="top-actions">
+      <button id="sound-btn" type="button">🔊 SOUND ON</button>
+      <button id="restart-btn" type="button">↻ NEW DUEL</button>
+    </div>
+  </header>
+
+  <section id="foe-zone" class="zone">
+    <div id="foe-info" class="side"></div>
+    <div class="foe-hand-wrap">
+      <div id="foe-hand" class="foe-hand"></div>
+      <div id="foe-deck" class="deck-count">DECK 20</div>
+    </div>
+    <div id="foe-intent" class="intent">Rook waits, ember in hand…</div>
+  </section>
+
+  <section id="table-zone" class="zone">
+    <div id="played-cards" class="played-cards"></div>
+    <div class="table-side">
+      <div id="chain-meter" class="chain-meter"></div>
+      <div id="battle-log" class="battle-log"></div>
+    </div>
+  </section>
+
+  <section id="player-zone" class="zone">
+    <div id="player-info" class="side"></div>
+    <div class="hand-wrap">
+      <div id="player-hand" class="player-hand"></div>
+      <div id="player-deck" class="deck-count">DECK 20</div>
+    </div>
+    <button id="end-turn" type="button">END TURN ⏎</button>
+  </section>
+
+  <div id="title-screen" class="overlay">
+    <div class="overlay-card title-card">
+      <div class="title-flame">🔥</div>
+      <h1>EMBER DUEL</h1>
+      <p class="tagline">An original duel of cards and cunning. Burn Rook’s 30 life to zero before yours runs out.</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot flame"></span><b>FLAME</b> — fierce strikes</div>
+        <div class="legend-item"><span class="legend-dot tide"></span><b>TIDE</b> — drains and mends</div>
+        <div class="legend-item"><span class="legend-dot leaf"></span><b>LEAF</b> — shields and blooms</div>
+        <div class="legend-item"><span class="legend-dot stone"></span><b>STONE</b> — heavy guards</div>
+      </div>
+      <p class="rules">Spend <b>ember</b> to play cards. Each turn you gain +1 ember and draw a card.
+      Play two cards of the <b>same element</b> in one turn to <b>chain +2 power</b>.
+      Click a card to select it, click again to play. Keys: <b>1–7</b> select, <b>Enter</b> play, <b>Space</b> end turn.</p>
+      <button id="start-btn" type="button" class="big-btn">⚔ START DUEL</button>
+      <p class="fine">Original game, art, names and sounds. No network, no account, no ads.</p>
+    </div>
+  </div>
+
+  <div id="end-screen" class="overlay" style="display:none">
+    <div class="overlay-card end-card">
+      <h1 id="end-title" class="won">🏆 VICTORY!</h1>
+      <p id="end-sub" class="tagline"></p>
+      <div id="end-stats" class="end-stats"></div>
+      <button id="play-again-btn" type="button" class="big-btn">↻ PLAY AGAIN</button>
+      <p class="fine">Press Enter to duel again.</p>
+    </div>
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

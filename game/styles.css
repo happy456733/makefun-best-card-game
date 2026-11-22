@@ -1,0 +1,236 @@
+/* Ember Duel — the table, the cards, the overlays. All art is CSS + inline SVG. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background: #0a0f0c;
+  font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  color: #f2e8d5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#app {
+  width: 1280px;
+  height: 800px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(255, 214, 120, 0.10), transparent 55%),
+    radial-gradient(ellipse at 50% 120%, #1d5c33 0%, #123d21 45%, #0a2a15 100%);
+  border: 3px solid #8a6d2f;
+  border-radius: 18px;
+  box-shadow: 0 0 0 6px #2a1f0d, 0 24px 60px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+/* ---------- Top bar ---------- */
+#topbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+  flex: none;
+}
+.brand { font-size: 24px; font-weight: 900; letter-spacing: 2px; color: #ffd76a; text-shadow: 0 2px 0 #7a4d00; }
+.turn-badge {
+  font-size: 15px; font-weight: 800; letter-spacing: 1px;
+  background: #d4af37; color: #241a00; padding: 7px 16px; border-radius: 999px;
+}
+.top-actions { display: flex; gap: 8px; }
+.top-actions button, #end-turn {
+  font: inherit; font-weight: 800; cursor: pointer;
+  background: #2c4636; color: #ffe9a8; border: 2px solid #d4af37;
+  border-radius: 10px; padding: 8px 14px;
+}
+.top-actions button:hover { background: #3a5c48; }
+
+/* ---------- Zones ---------- */
+.zone { position: relative; padding: 10px 18px; }
+#foe-zone { flex: none; height: 168px; display: flex; align-items: center; gap: 20px; border-bottom: 1px dashed rgba(255, 255, 255, 0.14); }
+#table-zone { flex: 1; display: flex; gap: 16px; min-height: 0; }
+#player-zone { flex: none; height: 300px; display: flex; align-items: flex-end; gap: 20px; border-top: 1px dashed rgba(255, 255, 255, 0.14); padding-bottom: 14px; }
+
+.side { display: flex; align-items: center; gap: 14px; width: 430px; flex: none; }
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; font-weight: 900; color: #fff;
+  border: 3px solid #ffd76a; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+.foe-avatar { background: radial-gradient(circle at 35% 30%, #ff7a4d, #8f1d0b); }
+.you-avatar { background: radial-gradient(circle at 35% 30%, #5db4ff, #0b3d8f); }
+.side-info { flex: 1; min-width: 0; }
+.side-name { font-size: 15px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; color: #ffe9a8; }
+
+.hp-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.hp-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #cfe8c9; width: 34px; }
+.hpbar {
+  position: relative; flex: 1; height: 24px; background: #101010;
+  border: 2px solid #000; border-radius: 999px; overflow: hidden;
+}
+.hp-fill { height: 100%; background: linear-gradient(90deg, #37c24a, #7ed957); transition: width 0.5s ease; }
+.hpbar.low .hp-fill { background: linear-gradient(90deg, #e83a2d, #ff7a4d); }
+.hp-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff; text-shadow: 0 1px 2px #000;
+}
+.shield-badge {
+  font-size: 12px; font-weight: 900; color: #bfe3ff; background: #173a5e;
+  border: 1px solid #5db4ff; padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+}
+.ember-row { display: flex; align-items: center; gap: 4px; }
+.ember-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #ffcf5e; margin-right: 4px; }
+.ember-gem {
+  width: 13px; height: 13px; transform: rotate(45deg);
+  background: #22301f; border: 1px solid #5a6b52; border-radius: 3px;
+}
+.ember-gem.lit { background: #ff9d2e; border-color: #ffd76a; box-shadow: 0 0 8px #ff9d2e; }
+
+.foe-hand-wrap, .hand-wrap { flex: 1; display: flex; align-items: center; justify-content: center; gap: 12px; min-width: 0; }
+.foe-hand { display: flex; }
+.foe-hand .card { margin-left: -38px; }
+.foe-hand .card:first-child { margin-left: 0; }
+.deck-count { font-size: 12px; font-weight: 900; letter-spacing: 1px; color: #d8c9a3; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 8px; }
+.intent {
+  position: absolute; right: 18px; top: 8px; font-size: 13px; font-style: italic;
+  color: #ffd2b0; background: rgba(60, 10, 0, 0.55); padding: 5px 12px; border-radius: 999px;
+  max-width: 520px; text-align: right;
+}
+
+/* ---------- Table middle ---------- */
+.played-cards { flex: 1; display: flex; align-items: center; justify-content: center; gap: 18px; min-width: 0; }
+.table-hint { font-size: 16px; color: #cfe8c9; opacity: 0.75; font-style: italic; }
+.played-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; animation: popIn 0.35s ease; }
+.played-wrap .card { width: 132px; height: 186px; }
+.played-tag { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #ffe9a8; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 999px; }
+.table-side { width: 300px; flex: none; display: flex; flex-direction: column; gap: 10px; }
+.chain-meter {
+  font-size: 13px; line-height: 1.45; color: #d8c9a3;
+  background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 10px 12px; border-radius: 10px;
+}
+.chain-meter.active { border-color: #ffd76a; color: #ffe9a8; box-shadow: 0 0 14px rgba(255, 180, 60, 0.35); }
+.battle-log {
+  flex: 1; overflow: hidden; font-size: 13px; line-height: 1.5;
+  background: rgba(0, 0, 0, 0.35); border-radius: 10px; padding: 10px 12px;
+}
+.log-line { color: #e8dcc0; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 2px 0; }
+.log-line:last-child { color: #ffd76a; font-weight: 700; }
+
+/* ---------- Player hand ---------- */
+.player-hand { display: flex; align-items: flex-end; justify-content: center; }
+.player-hand .card { margin-left: -24px; }
+.player-hand .card:first-child { margin-left: 0; }
+#end-turn {
+  flex: none; font-size: 17px; padding: 16px 22px; margin-bottom: 8px;
+  background: linear-gradient(180deg, #d4af37, #a67c1a); color: #241a00;
+  box-shadow: 0 6px 0 #6e4a08, 0 10px 20px rgba(0,0,0,0.45);
+}
+#end-turn:hover:not(:disabled) { filter: brightness(1.1); }
+#end-turn:disabled { opacity: 0.55; cursor: default; }
+
+/* ---------- Cards ---------- */
+.card {
+  position: relative; width: 148px; height: 208px; flex: none;
+  background: linear-gradient(180deg, #fff8e7 0%, #f3e3bd 100%);
+  border: 3px solid var(--el, #888); border-radius: 12px;
+  color: #241a00; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: default; user-select: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.card.playable { cursor: pointer; }
+.card.playable:hover { transform: translateY(-16px) scale(1.05); box-shadow: 0 18px 28px rgba(0,0,0,0.6), 0 0 0 3px #ffd76a; }
+.card.selected { transform: translateY(-18px) scale(1.06); box-shadow: 0 18px 28px rgba(0,0,0,0.6), 0 0 0 3px #ff9d2e, 0 0 22px #ff9d2e; }
+.card.dealt { animation: dealIn 0.4s ease backwards; }
+.card-cost {
+  position: absolute; top: -9px; left: -9px; width: 34px; height: 34px;
+  background: radial-gradient(circle at 35% 30%, #ffe9a8, #e8a91c);
+  border: 2px solid #7a4d00; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; font-weight: 900; color: #241a00; z-index: 2;
+}
+.card-art {
+  height: 92px; margin: 12px 10px 0; border-radius: 8px;
+  background: linear-gradient(160deg, var(--el-glow), var(--el-dark));
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+}
+.card-name { font-size: 15px; font-weight: 900; text-align: center; margin-top: 8px; padding: 0 6px; }
+.card-power { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-top: 2px; }
+.power-num { font-size: 32px; font-weight: 900; color: var(--el-dark); line-height: 1; }
+.power-label { font-size: 12px; font-weight: 900; letter-spacing: 1px; color: #6b5a2e; }
+.card-text { font-size: 12.5px; line-height: 1.35; text-align: center; padding: 4px 10px 0; color: #4a3d1e; }
+.card-element {
+  position: absolute; bottom: 0; left: 0; right: 0; text-align: center;
+  font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #fff;
+  background: var(--el); border-radius: 0 0 9px 9px; padding: 4px 0;
+}
+.card.back {
+  width: 92px; height: 128px; background: linear-gradient(160deg, #7a1d12, #3d0d06);
+  border-color: #d4af37; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px; cursor: default;
+}
+.back-mark { font-size: 30px; color: #ffd76a; }
+.back-word { font-size: 10px; font-weight: 900; letter-spacing: 3px; color: #ffd76a; }
+
+/* ---------- Floaters, shake, animations ---------- */
+.floater {
+  position: absolute; z-index: 30; font-size: 30px; font-weight: 900;
+  pointer-events: none; animation: floatUp 1.3s ease forwards;
+  text-shadow: 0 2px 0 #000, 0 0 12px rgba(0,0,0,0.6);
+}
+.floater.damage { color: #ff5a3c; left: 46%; top: 30%; }
+.floater.heal { color: #7ed957; left: 46%; top: 30%; }
+.floater.shield { color: #5db4ff; left: 46%; top: 30%; }
+@keyframes floatUp { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-70px) scale(1.25); } }
+@keyframes dealIn { from { opacity: 0; transform: translateY(30px) rotate(4deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+#table-zone.shake { animation: shake 0.4s ease; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+
+/* ---------- Overlays ---------- */
+.overlay {
+  position: absolute; inset: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(5, 12, 8, 0.82);
+}
+.overlay-card {
+  width: 640px; max-height: 92%; overflow: auto;
+  background: linear-gradient(180deg, #1d3a26, #0f2416);
+  border: 3px solid #d4af37; border-radius: 18px; padding: 30px 36px;
+  text-align: center; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+}
+.title-flame { font-size: 54px; }
+.overlay-card h1 { font-size: 52px; font-weight: 900; letter-spacing: 4px; color: #ffd76a; text-shadow: 0 3px 0 #7a4d00; margin: 4px 0 10px; }
+.overlay-card h1.lost { color: #ff6a4d; text-shadow: 0 3px 0 #5e0d02; }
+.tagline { font-size: 16px; line-height: 1.5; color: #e8dcc0; margin-bottom: 16px; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; text-align: left; }
+.legend-item { font-size: 13.5px; background: rgba(0,0,0,0.35); padding: 9px 12px; border-radius: 8px; }
+.legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; }
+.legend-dot.flame { background: #e8491d; } .legend-dot.tide { background: #1d7fe8; }
+.legend-dot.leaf { background: #3da53d; } .legend-dot.stone { background: #c98f2e; }
+.rules { font-size: 14px; line-height: 1.6; color: #d8c9a3; margin-bottom: 20px; }
+.big-btn {
+  font: inherit; font-size: 21px; font-weight: 900; letter-spacing: 1px; cursor: pointer;
+  background: linear-gradient(180deg, #ffd76a, #d4af37); color: #241a00;
+  border: 2px solid #7a4d00; border-radius: 12px; padding: 15px 34px;
+  box-shadow: 0 6px 0 #6e4a08, 0 12px 24px rgba(0,0,0,0.5);
+}
+.big-btn:hover { filter: brightness(1.08); }
+.fine { font-size: 12px; color: #9db894; margin-top: 16px; }
+.end-stats { display: flex; justify-content: center; gap: 18px; margin: 8px 0 22px; }
+.stat { background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.5); border-radius: 12px; padding: 12px 18px; min-width: 104px; }
+.stat-num { display: block; font-size: 30px; font-weight: 900; color: #ffd76a; }
+.stat-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #cfe8c9; }
+
+/* Screenshot mode: freeze every transition and animation for a clean frame. */
+body.shot * { transition: none !important; animation: none !important; }
